@@ -1,15 +1,5 @@
-from typing import Dict, Type, TypedDict
+from typing import Dict, List, Type
 from dataclasses import dataclass
-
-
-@dataclass
-class MsgDict(TypedDict):
-    """Класс для аннотации словаря к сообщению о тренировке"""
-    training_type: str
-    duration: float
-    distance: float
-    speed: float
-    calories: float
 
 
 @dataclass
@@ -28,14 +18,13 @@ class InfoMessage:
                            'Потрачено ккал: {calories:.3f}.')
 
     def get_message(self) -> str:
-        msg_dict: MsgDict = {
-            'training_type': self.training_type,
-            'duration': self.duration,
-            'distance': self.distance,
-            'speed': self.speed,
-            'calories': self.calories
-        }
-        return self.MESSAGE_FORMAT.format(**msg_dict)
+        return self.MESSAGE_FORMAT.format(
+            training_type=self.training_type,
+            duration=self.duration,
+            distance=self.distance,
+            speed=self.speed,
+            calories=self.calories
+        )
 
 
 class Training:
@@ -173,7 +162,7 @@ WORKOUT_TYPES: Dict[str, Type[Training]] = {
 }
 
 
-def read_package(workout_type: str, data: list[int]) -> Training:
+def read_package(workout_type: str, data: List[int]) -> Training:
     """Прочитать данные полученные от датчиков."""
     if workout_type not in WORKOUT_TYPES:
         raise KeyError('Ошибка в типе тренировки.')
